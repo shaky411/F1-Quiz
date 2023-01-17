@@ -21,6 +21,11 @@ const feedbackEl = document.getElementById("feedback");
 const timerEl = document.getElementById("time");
 const finalScoreEl = document.getElementById("final-score");
 const questionEl = document.getElementById("questions");
+const feedback = document.querySelector('#feedback');
+
+function hideResult() {
+    feedback.style.display = "none";
+  }
 
 // Global Variabls
 let incorrectCount =-10;
@@ -66,18 +71,43 @@ let questions = [
     {
         question: "Driver with the most wins in an F1 season is?",
         choices: ["Sebastian Vettel", "Max Verstappen", "Lewis Hamilton"],
-        answer: "Lewis Hamilton"
+        answer: "Max Verstappen"
     },
 
     {
         question: "Who is the current tyre supplier in F1?",
         choices: ["Pirelli", "Bridgestone", "Michelin"],
         answer: "Pirelli"
+    },
+
+    {
+        question: "What is the shortest circuit on the current F1 calendar?",
+        choices: ["Monaco", "Redbull Ring", "Zandvoort"],
+        answer: "Monaco"
     }
 
 ];
 
-// Handle start button
+// Timer Function //
+function startTime() {
+    timerEl.textContent = secondsLeft;
+        timerId = setInterval(
+        () => {
+            secondsLeft--;
+            timerEl.textContent = secondsLeft;
+            if (secondsLeft <= 0) {
+                clearInterval(timerId);
+                gameEnd();
+            }
+
+        }, 1000);
+}
+
+// Start Quiz button //
+let startBtn = document.getElementById("start");
+startBtn.addEventListener("click", startQuiz)
+
+// Handle start button //
 function startQuiz(event) {
     event.preventDefault()
     console.log("Start quiz trigerred")
@@ -87,34 +117,14 @@ function startQuiz(event) {
     startScreen.classList.add("hide")
     
     // Show first question
-    // let questionContainer = document.getElementById("questions")
-    // questionContainer.classList.toggle("hide");
     questionEl.classList.toggle("hide");
 
-    // Display first question and start timer
+    // Render first question and start timer
     renderQuestion();
     startTime();
 }
 
-function startTime() {
-    timerEl.textContent = secondsLeft;
-    let timerInterval = setInterval(
-        () => {
-            secondsLeft--;
-            timerEl.textContent = secondsLeft;
-            if (secondsLeft <= 0) {
-                clearInterval(timerInterval);
-                gameEnd();
-            }
-
-        }, 1000);
-}
-
-// {question: "Which driver has the most pole positions in F1 history?", 
-// choices: ["Sebastian Vettel", "Fernando Alonso", "Lewis Hamilton"], 
-// answer: 3},
-
-// Show the questions to the user
+// Show the questions to the user //
 function renderQuestion() {
     const currentQuestion = questions[currentQ].question
     // console.log(currentQuestion)
@@ -135,12 +145,13 @@ function renderQuestion() {
     }
 }
 
-// This checks the answers
-function checkAnswer(event){
-    event.preventDefault()
-    // console.log(event)
-    // console.log(event.target)
 
+// This checks the answers //
+function checkAnswer(event) {
+    event.preventDefault()
+    console.log(event)
+    console.log(event.target)
+    
     // get the correct answer
     if (event.target.textContent === questions[currentQ].answer) {
         // If the answer is correct, show these
@@ -163,40 +174,94 @@ function checkAnswer(event){
     };
 
     feedbackEl.setAttribute("class", "feedback");
-
     document.getElementById("choices").innerHTML = "";
-    // let questionContainer = document.getElementById("questions")
-    // questionContainer.innerHTML.add("hide");
-
-
     // goes to next question
-    currentQ ++;
 
+    setTimeout(
+        () => {
+            feedbackEl.setAttribute('class', 'hide');
+            // alert("timeout")
+            
+        }, 500);
 
-    if (currentQ === questions.length) {
-        gameEnd();
-    } else {
+    currentQ++;
+
+    if (currentQ < questions.length) {
         renderQuestion();
+    } else {
+        gameEnd();
     }
 }
 
+// End the quiz //
 function gameEnd() {
 
+    
     // Hide questions-container
     questionEl.classList.add("hide");
-    // Timer needs to stop - clearInterval
+    // Timer needs to stop - clearInterval?
     clearInterval(timerId);
-
-    // Show end
+    // Show end screen
     let endGameContainer = document.getElementById("end-screen")
     endGameContainer.classList.toggle("hide");
 
-    // timer = score
+    // Render score on end screen
+    getScore();
+}
+
+// Get the score
+function getScore() {
+    let score = document.getElementById('final-score');
+    score.textContent = secondsLeft;
 }
 
 
-let startBtn = document.getElementById("start");
-startBtn.addEventListener("click", startQuiz)
+
+
+
+
+
+
+
+// Enter initials and submit score //
+// const submit = document.querySelector('#submit');
+let initialsInput = document.querySelector('#initials');
+let logScore = document.querySelector('#highscores');
+let submitBtn = document.querySelector("#submit");
+
+submitBtn.addEventListener('click', submitScore);
+
+
+function submitScore(event) {
+    event.preventDefault();
+    
+    if (!initialsInput.value) {
+        console.log("Submit button clicked!");
+        return;
+    }
+
+    let leaderboardItem = {
+        initials: inputElement.value,
+        score: secondsLeft,
+    };
+    
+    }
+
+
+
+
+
+
+
+
+
+
+
+// Submit score button //
+// let submitBtn = document.getElementById('submit');
+
+
+
 
 
 // Shortcut function
@@ -213,3 +278,32 @@ startBtn.addEventListener("click", startQuiz)
 // button.setAttribute("disabled", "");
 
 
+
+
+
+
+
+
+// const submitButton = document.querySelector("#submit-button");
+//   const inputElement = document.querySelector("#initials");
+  
+//   //store user initials and score when submit button is clicked
+//   submitButton.addEventListener("click", storeScore);
+  
+//   function storeScore(event) {
+//     //prevent default behaviour of form submission
+//     event.preventDefault();
+  
+//     //check for input
+//     if (!inputElement.value) {
+//       alert("Please enter your initials before pressing submit!");
+//       return;
+//     }
+  
+//     //store score and initials in an object
+//     let leaderboardItem = {
+//       initials: inputElement.value,
+//       score: time,
+//     };
+  
+//     updateStoredLeaderboard(leaderboardItem);
