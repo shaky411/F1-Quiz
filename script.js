@@ -7,34 +7,31 @@
 // function to get correct answer
 // function to track score
 // function to end quiz
-// function to submit results
+
+// function to Store results & initials
+// function to submit results to results page
 
 // Useful info:
 // use event delegation
-// only need 1 event listeners
 // local storage needed for high score
 // Structure the DATA
-// Carasel activity
+// Carasol activity
 
-// DOM Elements
+// DOM Elements //
 const feedbackEl = document.getElementById("feedback");
 const timerEl = document.getElementById("time");
 const finalScoreEl = document.getElementById("final-score");
 const questionEl = document.getElementById("questions");
 const feedback = document.querySelector('#feedback');
 
-function hideResult() {
-    feedback.style.display = "none";
-  }
-
-// Global Variabls
+// Global Variabls //
 let incorrectCount =-10;
 let currentQ = 0;
 let secondsLeft = 100;
 let timerId;
 let finalScore;
 
-// Questions
+// Questions //
 // This is an array of objects to store my questions, possible answers and correct answer.
 let questions = [
 
@@ -218,92 +215,50 @@ function getScore() {
 
 
 
-
-
-
-
-
 // Enter initials and submit score //
 // const submit = document.querySelector('#submit');
 let initialsInput = document.querySelector('#initials');
 let logScore = document.querySelector('#highscores');
 let submitBtn = document.querySelector("#submit");
 
+
 submitBtn.addEventListener('click', submitScore);
 
 
 function submitScore(event) {
     event.preventDefault();
+
+    let leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || [];
+
+    
+    
+
     
     if (!initialsInput.value) {
-        console.log("Submit button clicked!");
+        alert("Enter your initials (no more than 3 characters");
         return;
     }
 
     let leaderboardItem = {
-        initials: inputElement.value,
+        initials: initialsInput.value,
         score: secondsLeft,
     };
+
+    leaderboard.push(leaderboardItem);
+    console.log(leaderboardItem);
     
+    localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
+
+    window.location.href = "highscores.html"
+
+
+
     }
 
 
-
-
-
-
-
-
-
-
-
-// Submit score button //
-// let submitBtn = document.getElementById('submit');
-
-
-
-
-
 // Shortcut function
-// function changeState(current, next) {
+// function changeState(currentState, nextState) {
 //     document.getElementById(current).classList.add('hide');
 //     document.getElementById(next).removeAttribute('class');
 
 // }
-
-// // set attribute
-// const button = document.querySelector('button');
-
-// button.setAttribute("name", "helloButton");
-// button.setAttribute("disabled", "");
-
-
-
-
-
-
-
-
-// const submitButton = document.querySelector("#submit-button");
-//   const inputElement = document.querySelector("#initials");
-  
-//   //store user initials and score when submit button is clicked
-//   submitButton.addEventListener("click", storeScore);
-  
-//   function storeScore(event) {
-//     //prevent default behaviour of form submission
-//     event.preventDefault();
-  
-//     //check for input
-//     if (!inputElement.value) {
-//       alert("Please enter your initials before pressing submit!");
-//       return;
-//     }
-  
-//     //store score and initials in an object
-//     let leaderboardItem = {
-//       initials: inputElement.value,
-//       score: time,
-//     };
-  
-//     updateStoredLeaderboard(leaderboardItem);
