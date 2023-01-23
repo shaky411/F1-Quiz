@@ -229,10 +229,6 @@ function submitScore(event) {
     event.preventDefault();
 
     let leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || [];
-
-    
-    
-
     
     if (!initialsInput.value) {
         alert("Enter your initials (no more than 3 characters");
@@ -251,9 +247,7 @@ function submitScore(event) {
 
     window.location.href = "highscores.html"
 
-
-
-    }
+    };
 
 
 // Shortcut function
