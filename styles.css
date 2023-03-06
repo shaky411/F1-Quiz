@@ -124,4 +124,9 @@ li:nth-child(odd) {
 
 } */
 
+#highscores .name-li {
+  color: #00ffa6;
+  font-size: 50px;
+}
+
 
